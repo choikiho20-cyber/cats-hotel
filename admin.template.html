@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>관리 · {{name}}</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--paper:#F6F1EA;--paper2:#EDE5D9;--ink:#1C1915;--ink2:#4A443C;--stone:#7A6F63;--line:rgba(28,25,21,.16);--cu:#9A5222;--cu-h:#7F4219;--bad:#B3261E;--good:#2E7D4F;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);font-size:16px;line-height:1.65;color:var(--ink);background:var(--paper);word-break:keep-all}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--cu);outline-offset:2px}
+a{color:var(--cu)}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:rgba(246,241,234,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .brand{display:flex;align-items:center;gap:10px;font-weight:600}
+header .brand svg{width:30px;height:30px}
+header .who{font-size:13px;color:var(--stone)}
+main{max-width:860px;margin:0 auto;padding:18px 16px 140px}
+.card{border:1px solid var(--line);background:#fff;padding:18px 16px;margin-bottom:14px;border-radius:4px}
+.card h2{font-size:17px;margin:0 0 4px}
+.card .hint{font-size:13.5px;color:var(--stone);margin:0 0 12px}
+label{display:block;font-size:13.5px;color:var(--ink2);margin:12px 0 5px}
+input[type=text],input[type=password],input[type=url],input[type=tel],textarea{width:100%;padding:12px 13px;background:var(--paper);border:1px solid var(--line);border-radius:3px;color:var(--ink);min-height:46px}
+textarea{min-height:88px;resize:vertical;line-height:1.6}
+input:focus,textarea:focus{outline:none;border-color:var(--cu);background:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 18px;min-height:46px;border:1px solid var(--cu);color:var(--cu);border-radius:3px;font-size:15px;font-weight:600;background:#fff;transition:background .2s,color .2s}
+.btn:hover{background:var(--cu);color:#fff}
+.btn.solid{background:var(--cu);color:#fff}
+.btn.solid:hover{background:var(--cu-h)}
+.btn.ghost{border-color:var(--line);color:var(--ink2)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
+.item{position:relative;padding:14px 14px 14px;margin-top:12px;border:1px dashed var(--line);border-radius:4px;background:var(--paper)}
+.item label:first-child{margin-top:0}
+.item .del{position:absolute;right:8px;top:8px;font-size:13px;color:var(--stone);padding:6px 8px}
+.item .del:hover{color:var(--bad)}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line)}
+.savebar .msg{font-size:14px;color:var(--ink2);flex:1;min-width:0}
+.savebar .msg.ok{color:var(--good)}
+.savebar .msg.err{color:var(--bad)}
+.savebar .btn{min-width:140px}
+.warn{font-size:13.5px;color:var(--ink2);background:var(--paper2);padding:10px 12px;border-radius:3px;margin-top:12px}
+[hidden]{display:none!important}
+@media (max-width:600px){.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html" style="text-decoration:none;color:inherit">{{cat_svg}}<span>{{name}} 관리</span></a>
+  <span class="who" id="who">연결 안 됨</span>
+</header>
+
+<main>
+  <section class="card" id="gate">
+    <h2>열쇠 연결</h2>
+    <p class="hint">처음 한 번만 GitHub 토큰을 넣어 주세요. 이 기기에만 저장되고 서버로 보내지 않습니다. 토큰은 소통마케팅센터가 발급해 드립니다.</p>
+    <label for="tok">GitHub 토큰</label>
+    <input id="tok" type="password" autocomplete="off" placeholder="github_pat_...">
+    <div class="row"><button class="btn solid" id="tokSave">연결</button><button class="btn ghost" id="tokClear" hidden>연결 끊기</button></div>
+  </section>
+
+  <div id="app" hidden>
+    <section class="card">
+      <h2>공지 한 줄</h2>
+      <p class="hint">첫 화면 제목 위에 나옵니다. 예: <b>11/14~15 전국중등축구 기간, 단체 문의는 서둘러 주세요</b>. 비우면 안 나옵니다.</p>
+      <input id="notice" type="text" maxlength="60" placeholder="비우면 안 나옵니다">
+    </section>
+
+    <section class="card">
+      <h2>전화번호 · 시간</h2>
+      <p class="hint">전화 버튼·문자 버튼·예약 버튼·검색 정보가 전부 이 번호로 바뀝니다.</p>
+      <label for="phone">대표 전화</label>
+      <input id="phone" type="tel" placeholder="010-0000-0000">
+      <div class="grid3">
+        <div><label for="checkin">입실</label><input id="checkin" type="text" placeholder="15:00"></div>
+        <div><label for="checkout">퇴실</label><input id="checkout" type="text" placeholder="12:00"></div>
+        <div><label for="daesil">대실</label><input id="daesil" type="text" placeholder="4시간"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>유튜브 영상</h2>
+      <p class="hint">유튜브 영상 주소를 넣으면 홈페이지 사진첩 앞에 "영상으로 보기" 칸이 생깁니다. 비우면 칸이 사라집니다.</p>
+      <input id="youtube_video" type="url" placeholder="https://www.youtube.com/watch?v=…">
+    </section>
+
+    <section class="card">
+      <h2>객실 요금</h2>
+      <p class="hint">비우면 "요금 문의"로 나옵니다. 예: <b>주중 50,000원 · 주말 60,000원</b></p>
+      <div id="rooms"></div>
+    </section>
+
+    <section class="card">
+      <h2>평점</h2>
+      <p class="hint">예약 앱에 보이는 숫자를 그대로 옮겨 적으세요. 기준 날짜도 같이 바꿔 주세요.</p>
+      <div id="ratings"></div>
+      <label for="rating_date">기준 날짜</label>
+      <input id="rating_date" type="text" placeholder="2026-10-29">
+    </section>
+
+    <section class="card">
+      <h2>채널 주소</h2>
+      <p class="hint">주소를 넣는 순간 홈페이지 버튼·맨 아래 링크에 저절로 나옵니다. 네이버 예약 주소를 넣으면 객실마다 있는 [네이버 예약] 버튼이 그 주소로 바뀝니다.</p>
+      <div id="channels"></div>
+    </section>
+
+    <section class="card">
+      <h2>자주 묻는 질문</h2>
+      <p class="hint">질문은 물음표로 끝내 주세요. 답에 <b>{phone}</b> <b>{checkin}</b> <b>{checkout}</b> <b>{daesil}</b>라고 쓰면 위 값이 자동으로 들어갑니다.</p>
+      <div id="faq"></div>
+      <div class="row"><button class="btn sm" data-add="faq">+ 질문 추가</button></div>
+    </section>
+
+    <section class="card">
+      <h2>이용 안내</h2>
+      <p class="hint">왼쪽 제목(숙박·대실·주차…)과 오른쪽 설명입니다.</p>
+      <div id="rules"></div>
+      <div class="row"><button class="btn sm" data-add="rules">+ 항목 추가</button></div>
+    </section>
+
+    <section class="card">
+      <h2>그 밖의 일</h2>
+      <p class="hint">블로그 글은 <b>글해줌</b>에서 발행하면 이 홈페이지 소식 칸에 저절로 올라옵니다. 사진 교체·객실 설명·구간 추가는 소통마케팅센터에 말씀해 주세요.</p>
+      <div class="row">
+        <a class="btn ghost sm" href="index.html" target="_blank" rel="noopener">홈페이지 열기</a>
+        <a class="btn ghost sm" href="https://github.com/{{repo}}/actions" target="_blank" rel="noopener">반영 진행 보기</a>
+        <a class="btn ghost sm" href="https://github.com/{{repo}}/commits/{{branch}}" target="_blank" rel="noopener">변경 기록</a>
+      </div>
+      <p class="warn">저장하면 1~2분 뒤 홈페이지에 반영됩니다. 반영이 안 보이면 새로고침(휴대폰은 아래로 당기기)해 주세요.</p>
+    </section>
+  </div>
+</main>
+
+<div class="savebar" id="savebar" hidden>
+  <span class="msg" id="msg">바뀐 내용이 없습니다</span>
+  <button class="btn solid" id="save">저장</button>
+</div>
+
+<script>
+const REPO='{{repo}}', BRANCH='{{branch}}', CFG='site.config.json', KEY='cats_gh_token';
+const API=`https://api.github.com/repos/${REPO}/contents/`;
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const b64enc=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+const b64dec=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+const token=()=>localStorage.getItem(KEY)||'';
+let cfg=null, sha=null, orig='';
+
+async function gh(path,opts={}){
+  const r=await fetch(API+path,{...opts,headers:{Authorization:'Bearer '+token(),Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',...(opts.headers||{})}});
+  if(!r.ok) throw new Error(r.status+' '+(await r.text()).slice(0,120));
+  return r.json();
+}
+function msg(t,kind){const m=$('msg');m.textContent=t;m.className='msg '+(kind||'')}
+
+/* ── 열쇠 ── */
+function gate(){
+  const on=!!token();
+  $('app').hidden=!on; $('savebar').hidden=!on; $('tokClear').hidden=!on;
+  $('tok').value=''; $('tok').placeholder=on?'연결됨 — 바꾸시려면 새 토큰 입력':'github_pat_...';
+  $('who').textContent=on?'연결됨':'연결 안 됨';
+  if(on) load();
+}
+$('tokSave').onclick=async()=>{
+  const v=$('tok').value.trim(); if(!v) return alert('토큰을 넣어 주세요.');
+  localStorage.setItem(KEY,v);
+  try{ await gh(CFG+'?ref='+BRANCH); gate(); }
+  catch(e){ localStorage.removeItem(KEY); alert('연결 실패 — 토큰이나 권한을 확인해 주세요.\n'+e.message); }
+};
+$('tokClear').onclick=()=>{ localStorage.removeItem(KEY); gate(); };
+
+/* ── 읽기 ── */
+async function load(){
+  msg('불러오는 중…');
+  try{
+    const r=await gh(CFG+'?ref='+BRANCH);
+    sha=r.sha; cfg=JSON.parse(b64dec(r.content)); orig=JSON.stringify(cfg);
+    render(); msg('바뀐 내용이 없습니다');
+  }catch(e){ msg('설정을 불러오지 못했습니다: '+e.message,'err'); }
+}
+function render(){
+  $('notice').value=cfg.notice||'';
+  $('youtube_video').value=cfg.youtube_video||'';
+  $('phone').value=cfg.phone||'';
+  ['checkin','checkout','daesil','rating_date'].forEach(k=>$(k).value=cfg[k]||'');
+  $('rooms').innerHTML=cfg.rooms.map((r,i)=>`<label for="room${i}">${esc(r.name)} <span style="color:var(--stone);font-weight:400">· ${esc(r.people)}</span></label><input id="room${i}" type="text" data-room="${i}" value="${esc(r.price)}" placeholder="요금 문의">`).join('');
+  $('ratings').innerHTML=cfg.ratings.map((r,i)=>`<div class="grid2"><div><label>${esc(r.site)} 평점 (${esc(r.scale)}점 만점)</label><input type="text" data-rt="${i}" data-k="score" value="${esc(r.score)}"></div><div><label>${esc(r.site)} 후기 수</label><input type="text" data-rt="${i}" data-k="count" value="${esc(r.count)}"></div></div>`).join('');
+  $('channels').innerHTML=cfg.channels.map((c,i)=>c.ota?'':`<label for="ch${i}">${esc(c.name)}</label><input id="ch${i}" type="url" data-ch="${i}" value="${esc(c.url)}" placeholder="https://…  (없으면 비워 두세요)">`).join('');
+  $('faq').innerHTML=cfg.faq.map((f,i)=>pair('faq',i,'질문','답',f[0],f[1])).join('');
+  $('rules').innerHTML=cfg.rules.map((r,i)=>pair('rules',i,'제목','설명',r[0],r[1],true)).join('');
+}
+function pair(kind,i,l1,l2,a,b,short){
+  return `<div class="item" data-kind="${kind}"><button class="del" type="button" title="삭제">삭제 ✕</button>
+    <label>${l1}</label>${short?`<input type="text" class="k1" value="${esc(a)}">`:`<textarea class="k1" style="min-height:52px">${esc(a)}</textarea>`}
+    <label>${l2}</label><textarea class="k2">${esc(b)}</textarea></div>`;
+}
+document.addEventListener('click',e=>{
+  const add=e.target.closest('[data-add]');
+  if(add){ const k=add.dataset.add; $(k).insertAdjacentHTML('beforeend', k==='faq'?pair('faq',-1,'질문','답','',''):pair('rules',-1,'제목','설명','','',true)); $(k).lastElementChild.querySelector('.k1').focus(); dirty(); }
+  const del=e.target.closest('.item .del');
+  if(del&&confirm('이 항목을 지울까요?')){ del.closest('.item').remove(); dirty(); }
+});
+document.addEventListener('input',dirty);
+
+/* ── 모으기 · 저장 ── */
+function collect(){
+  const c=JSON.parse(JSON.stringify(cfg));  // 원본 순서·주석 칸 그대로, 바뀐 값만 덮어씀
+  c.notice=$('notice').value.trim();
+  c.youtube_video=$('youtube_video').value.trim();
+  const ph=$('phone').value.trim();
+  c.phone=ph; c.sms=ph; c.phone_booking=ph;   // 홈페이지의 모든 전화·문자·예약 버튼은 번호 하나
+  ['checkin','checkout','daesil','rating_date'].forEach(k=>c[k]=$(k).value.trim());
+  document.querySelectorAll('[data-room]').forEach(el=>c.rooms[+el.dataset.room].price=el.value.trim());
+  document.querySelectorAll('[data-rt]').forEach(el=>c.ratings[+el.dataset.rt][el.dataset.k]=el.value.trim());
+  document.querySelectorAll('[data-ch]').forEach(el=>c.channels[+el.dataset.ch].url=el.value.trim());
+  c.faq=[...document.querySelectorAll('#faq .item')].map(it=>[it.querySelector('.k1').value.trim(),it.querySelector('.k2').value.trim()]).filter(p=>p[0]&&p[1]);
+  c.rules=[...document.querySelectorAll('#rules .item')].map(it=>[it.querySelector('.k1').value.trim(),it.querySelector('.k2').value.trim()]).filter(p=>p[0]&&p[1]);
+  return c;
+}
+function check(c){
+  if(!/^0\d{1,2}-\d{3,4}-\d{4}$/.test(c.phone)) return '전화번호는 010-0000-0000 모양으로 넣어 주세요.';
+  for(const k of ['checkin','checkout']) if(!/^\d{2}:\d{2}$/.test(c[k])) return (k==='checkin'?'입실':'퇴실')+' 시간은 15:00 모양으로 넣어 주세요.';
+  if(!c.daesil) return '대실 시간을 넣어 주세요.';
+  if(c.youtube_video&&!/(youtube\.com|youtu\.be)\//.test(c.youtube_video)) return '유튜브 영상 주소는 youtube.com 또는 youtu.be 주소여야 합니다.';
+  for(const [q] of c.faq) if(!q.endsWith('?')) return '질문은 물음표(?)로 끝내 주세요: '+q;
+  for(const ch of c.channels) if(ch.url&&!/^https?:\/\//.test(ch.url)) return ch.name+' 주소는 https:// 로 시작해야 합니다.';
+  return '';
+}
+const LABEL={notice:'공지',youtube_video:'유튜브 영상',phone:'전화',checkin:'입실',checkout:'퇴실',daesil:'대실',rooms:'객실 요금',ratings:'평점',rating_date:'평점 날짜',channels:'채널 주소',faq:'자주 묻는 질문',rules:'이용 안내'};
+function changed(c){const o=JSON.parse(orig);return Object.keys(LABEL).filter(k=>JSON.stringify(o[k])!==JSON.stringify(c[k])).map(k=>LABEL[k])}
+function dirty(){ if(!cfg) return; const ch=changed(collect()); msg(ch.length?('바뀐 것: '+ch.join(' · ')):'바뀐 내용이 없습니다'); $('save').disabled=!ch.length; }
+
+$('save').onclick=async()=>{
+  const c=collect(), bad=check(c); if(bad) return msg(bad,'err');
+  const ch=changed(c); if(!ch.length) return;
+  $('save').disabled=true; msg('저장 중…');
+  try{
+    // 쓰기 직전에 sha를 다시 받아 글해줌·다른 기기의 변경을 덮어쓰지 않게 한다
+    const cur=await gh(CFG+'?ref='+BRANCH);
+    if(cur.sha!==sha){ cfg=JSON.parse(b64dec(cur.content)); sha=cur.sha; }
+    const body=JSON.stringify(c,null,2)+'\n';
+    const r=await gh(CFG,{method:'PUT',body:JSON.stringify({message:'사장님 수정: '+ch.join('·'),content:b64enc(body),sha,branch:BRANCH})});
+    sha=r.content.sha; cfg=c; orig=JSON.stringify(c);
+    msg('저장했습니다. 1~2분 뒤 홈페이지에 반영됩니다.','ok');
+  }catch(e){ msg('저장 실패: '+e.message+(/409/.test(e.message)?' — 다른 곳에서 먼저 바뀌었습니다. 새로고침 후 다시 해 주세요.':''),'err'); $('save').disabled=false; }
+};
+gate();
+</script>
+</body>
+</html>

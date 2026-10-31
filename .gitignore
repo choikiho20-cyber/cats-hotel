@@ -1,0 +1,12 @@
+# 저장소는 공개(GitHub Pages) — 내부 자료는 올리지 않는다. 사이트는 Actions가 만든 dist만 서빙
+dist/
+_원본사진_OTA/
+_임시사진_여기어때/
+인수인계.md
+wrangler.jsonc
+node_modules/
+__pycache__/
+*.pyc
+Thumbs.db
+.DS_Store
+.wrangler/

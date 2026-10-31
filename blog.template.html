@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{robots_meta}}
+<title>소식·안내 글 | {{name}} — 제천 출장·선수단·단체 숙소</title>
+<meta name="description" content="{{name}}의 안내 글 모음. 제천 대회 숙소, 출장 숙박, 객실·주차·전기차 충전 이용 방법을 사실 위주로 정리합니다.">
+<link rel="canonical" href="{{base}}/blog.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{name}}">
+<meta property="og:title" content="{{name}} 소식·안내 글">
+<meta property="og:description" content="제천 대회 숙소·출장 숙박·객실·주차·전기차 충전 안내 글 모음">
+<meta property="og:url" content="{{base}}/blog.html">
+<meta property="og:image" content="{{og_image}}">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#17130F">
+<link rel="alternate" type="application/rss+xml" title="{{name}} 소식" href="{{base}}/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 글꼴 CSS는 화면 그리기를 막지 않게 뒤에서 받음(처음엔 기본 글꼴 → 받는 즉시 교체, 인트로 막이 가림) -->
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Noto+Serif+KR:wght@500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Noto+Serif+KR:wght@500;600&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
+<link rel="stylesheet" href="blog.css?v={{css_v}}">
+{{ga4_snippet}}
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="{{name}} 홈페이지">{{cat_svg}}<b>{{name}}</b></a>
+    <nav aria-label="바로가기"><a href="index.html#rooms">객실</a><a href="index.html#parking">주차</a><a class="top-call" href="tel:{{tel}}" data-track="call_header">{{ico_call}}{{phone}}</a></nav>
+  </div>
+</header>
+
+<main class="wrap page">
+  <p class="crumb up"><a href="index.html">홈</a> › 소식·안내 글</p>
+  <header class="bhead up">
+    <p class="eyebrow">Journal</p>
+    <h1>{{name}} 소식·안내 글</h1>
+    <p>제천 대회 숙소, 출장 숙박, 객실·주차·전기차 충전 이용 방법을 정리해 올립니다.</p>
+  </header>
+  <div class="blist up" id="blist">{{blog_list_html}}</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>{{name}}</b>
+    <p>{{addr_full}}</p>
+    <p>전화 <a href="tel:{{tel}}">{{phone}}</a> · 입실 {{checkin}} · 퇴실 {{checkout}} · <a href="index.html">홈페이지</a></p>
+    <p class="f-legal">© {{year}} {{name}}</p>
+  </div>
+</footer>
+
+<nav class="bar" aria-label="빠른 문의">
+  <a href="tel:{{tel}}" data-track="call_bar">{{ico_call}}전화</a>
+  <a href="{{sms_href}}" data-track="sms_bar">{{ico_sms}}문자</a>
+  <a href="{{route_url}}" target="_blank" rel="noopener" data-track="route_bar">{{ico_pin}}길찾기</a>
+</nav>
+
+<script>
+document.addEventListener('click',function(e){var a=e.target.closest('[data-track]');if(a&&window.gtag)gtag('event','contact_click',{method:a.dataset.track})});
+// 글해줌이 새 글을 올리면 posts.json이 먼저 바뀐다 → 목록은 여기서 다시 그린다 (위 목록은 빌드 때 것, 자바스크립트 없을 때용)
+fetch('posts.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(all){
+  var esc=function(t){return String(t||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  all.sort(function(a,b){return b.id-a.id});
+  document.getElementById('blist').innerHTML=all.map(function(p){
+    return '<a class="bcard" href="posts/'+p.id+'.html"><time datetime="'+esc(p.date)+'">'+esc(p.date)+'</time><h3>'+esc(p.title)+'</h3><p>'+esc(p.summary)+'</p><span class="go">읽기 →</span></a>';
+  }).join('');
+}).catch(function(){});
+</script>
+</body>
+</html>
