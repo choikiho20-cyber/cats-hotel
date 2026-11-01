@@ -218,7 +218,7 @@ V = {
     "tel": re.sub(r"[^0-9]", "", phone),
     "description": escape(description),
     "robots_meta": '<meta name="robots" content="noindex">' if (cfg["photos_temporary"] or not domain) else "",
-    "canonical": f'<link rel="canonical" href="{domain}/">\n<meta property="og:url" content="{domain}/">' if domain else "",
+    "canonical": f'<link rel="canonical" href="{base}/">\n<meta property="og:url" content="{base}/">',
     # 도메인 전에는 미리보기 주소로 — 카톡 공유 카드는 절대 주소여야 사진이 뜬다
     "og_image": f"{domain or cfg['preview_url'].rstrip('/')}/og.jpg",
     "google_verify": cfg["google_verify"],
