@@ -411,7 +411,12 @@ if posts_path.exists():
 if (ROOT / "images" / "posts").is_dir():  # 글해줌이 올린 글 사진은 변환 없이 그대로
     shutil.copytree(ROOT / "images" / "posts", DIST / "images" / "posts")
 (DIST / "blog.html").write_text(fill((ROOT / "blog.template.html").read_text(encoding="utf-8"),
-                                     dict(B, blog_list_html="".join(post_card(x) for x in posts))), encoding="utf-8")
+                                     dict(B, blog_list_html="".join(post_card(x) for x in posts),
+                                          blog_ld='<script type="application/ld+json">' + json.dumps({
+                                              "@context": "https://schema.org", "@type": "CollectionPage", "name": f"{name} 소식·안내 글",
+                                              "url": f"{base}/blog.html", "inLanguage": "ko-KR",
+                                              "hasPart": [{"@type": "Article", "headline": x["title"], "url": f"{base}/posts/{x['id']}.html", "datePublished": str(x["date"])[:10]} for x in posts]},
+                                              ensure_ascii=False).replace("<", chr(92) + "u003c") + "</script>")), encoding="utf-8")
 # 사장님 관리 화면 — 저장소의 site.config.json을 고치면 GitHub Actions가 다시 빌드
 (DIST / "admin.html").write_text(fill((ROOT / "admin.template.html").read_text(encoding="utf-8"),
                                       dict(name=escape(name), repo=cfg["repo"], branch=cfg["branch"], cat_svg=cat_svg)), encoding="utf-8")
