@@ -301,6 +301,7 @@ V = {
     "channels_html": '<a href="blog.html">소식·안내 글</a>' + "".join(link(c, c["name"], "ch_" + c["name"], "") for c in channels if c.get("footer", True)),
     "biz_line": " · ".join(b for b in biz if b) + (" · " if any(biz) else ""),
     "year": datetime.date.today().year,
+    "updated": datetime.date.today().isoformat(),  # 빌드 = 내용이 바뀐 날(push마다 Actions가 빌드) — AI가 최신 정보로 판단
 }
 
 # ── 구조화 데이터 (검색엔진·AI가 읽는 업소 정보) ─────────────────
@@ -421,6 +422,9 @@ if (ROOT / "images" / "posts").is_dir():  # 글해줌이 올린 글 사진은 �
 (DIST / "admin.html").write_text(fill((ROOT / "admin.template.html").read_text(encoding="utf-8"),
                                       dict(name=escape(name), repo=cfg["repo"], branch=cfg["branch"], cat_svg=cat_svg)), encoding="utf-8")
 (DIST / ".nojekyll").write_text("", encoding="utf-8")
+# IndexNow 키(저장소 루트의 <32자리>.txt) — 글해줌 발행기가 루트에서 찾아 쓰고, 검색엔진은 사이트 루트에서 확인한다
+for k in ROOT.glob("*.txt"):
+    if re.fullmatch(r"[0-9a-f]{32}", k.stem): shutil.copy(k, DIST / k.name)
 (DIST / "404.html").write_text(f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>페이지를 찾을 수 없습니다 | {escape(name)}</title><link rel="icon" href="{base}/favicon.svg" type="image/svg+xml">
