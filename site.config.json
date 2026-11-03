@@ -36,7 +36,7 @@
   "biz_no": "228-42-00762",
   "ga4": "G-EPEB0SC1MH",
   "google_verify": "",
-  "naver_verify": "",
+  "naver_verify": "44db609f61c8dde259cd59e215353cc7b866544b",
   "photos_temporary": false,
   "_사진": "images 폴더의 원본 파일 이름. 지금 사진은 여기어때·야놀자에 올라간 숙소 사진(10/29, 원본은 _원본사진_OTA/). 촬영본으로 바꿀 땐 같은 이름으로 덮어쓰면 build.py가 웹용(1600·800px webp)을 새로 만듭니다.",
   "images": {
