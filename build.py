@@ -144,7 +144,7 @@ BOOK = (f'<div class="book">'
         + (f'<a class="btn btn-naver" href="{escape(booking["url"])}" target="_blank" rel="noopener" '
            f'data-track="room_naver"><span class="n" aria-hidden="true">N</span>네이버 예약</a>' if booking else
            # 11/3 대표님: 네이버 예약 설정 전 — 지도로 보내지 말고 '준비 중'만 보여 준다
-           '<span class="btn btn-naver is-soon" aria-disabled="true"><span class="n" aria-hidden="true">N</span>네이버 예약 준비 중</span>')
+           '<span class="btn btn-naver is-soon" aria-disabled="true"><span class="n" aria-hidden="true">N</span><span>네이버 예약<br>준비 중</span></span>')
         +
         f'<a class="btn btn-cu" href="tel:{re.sub(r"[^0-9]", "", cfg["phone_booking"])}" data-track="room_call">{ico_call}전화 예약</a>'
         f'</div>')
