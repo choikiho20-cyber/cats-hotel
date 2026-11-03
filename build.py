@@ -438,7 +438,7 @@ for k in ROOT.glob("*.txt"):
 <div class="blist up"><a class="bcard" href="{base}/"><h3>홈페이지 처음으로</h3><p>주차 · 객실 · 출장·단체 · 오시는 길</p><span class="go">가기 →</span></a>
 <a class="bcard" href="{base}/blog.html"><h3>소식·안내 글</h3><p>대회 숙소 안내 · 이용 방법</p><span class="go">가기 →</span></a>
 <a class="bcard" href="tel:{V['tel']}"><h3>전화 {phone}</h3><p>예약·문의는 전화나 문자로</p><span class="go">전화 걸기 →</span></a></div></main>
-<footer><div class="wrap"><b>{escape(name)}</b><p>{V['addr_full']}</p><p class="f-legal">© {V['year']} {escape(name)}</p></div></footer></body></html>
+<footer><div class="wrap"><b>{escape(name)}</b><p>{V['addr_full']}</p><p class="f-legal">© {V['year']} {escape(name)} · 제작 <a href="https://sotongmk.com" target="_blank" rel="noopener">소통마케팅센터</a></p></div></footer></body></html>
 """, encoding="utf-8")
 if posts:
     items = "".join(
