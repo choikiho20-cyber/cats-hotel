@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{name}}">
 <meta property="og:title" content="주차 넓은 {{name}} — 제천 화산동">
-<meta property="og:description" content="지붕 있는 지상 주차 25대 · 승합차 OK · 최대 6인 온돌방. 출장·단체 문의 {{phone}}">
+<meta property="og:description" content="지상 주차 25대(지붕 22대) · 승합차 OK · 최대 6인 온돌방. 출장·단체 문의 {{phone}}">
 <meta property="og:image" content="{{og_image}}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -248,6 +248,7 @@ html:has(.pv[open]){overflow:hidden}
 .book .btn{min-height:54px;padding:0 12px;font-size:17px;gap:8px}
 .btn-naver{border-color:var(--ink);color:var(--ink);background:transparent}
 .btn-naver:hover{background:var(--ink);color:var(--paper)}
+.btn-naver.is-soon,.btn-naver.is-soon:hover{opacity:.5;cursor:default;background:transparent;color:var(--ink)}
 .btn-naver .n{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:4px;background:#03C75A;color:#fff;font-size:13px;font-weight:800;line-height:1}
 .mini-room .book{margin-top:4px}
 .mini-room .book .btn{min-height:48px;font-size:15px;gap:6px;padding:0 8px}
@@ -518,7 +519,7 @@ footer{background:var(--night);color:#BDB3A7;padding:80px 0 136px;font-size:15px
     {{notice_html}}
     <p class="eyebrow">Jecheon · Hwasan-dong</p>
     <h1>주차 넓은<br>{{name}}</h1>
-    <p class="sub">지붕 있는 지상 주차 25대 · 전기차 충전 · 승합차 OK · 제천종합운동장 걸어서 3분</p>
+    <p class="sub">지상 주차 25대(지붕 22대) · 전기차 충전 · 승합차 OK · 제천종합운동장 걸어서 3분</p>
     <div class="cta">
       <a class="btn btn-cu" href="tel:{{tel}}" data-track="call_hero">{{ico_call}}전화 문의</a>
       <a class="btn btn-ghost" href="{{sms_href}}" data-track="sms_hero">{{ico_sms}}문자 문의</a>
@@ -534,7 +535,7 @@ footer{background:var(--night);color:#BDB3A7;padding:80px 0 136px;font-size:15px
     <div class="stay-in">
       <div class="cell"><span>Check-in</span><b>{{checkin}}</b></div>
       <div class="cell"><span>Check-out</span><b>{{checkout}}</b></div>
-      <div class="cell"><span>Parking</span><b>지붕 25대</b></div>
+      <div class="cell"><span>Parking</span><b>25대 · 지붕 22</b></div>
       <div class="cell"><span>Day use</span><b>대실 {{daesil}}</b></div>
       <a class="btn btn-cu" href="tel:{{tel}}" data-track="call_staybar">{{ico_call}}{{phone}}</a>
     </div>
@@ -548,10 +549,10 @@ footer{background:var(--night);color:#BDB3A7;padding:80px 0 136px;font-size:15px
     <p class="eyebrow rv">Welcome</p>
     <p class="statement rv">차를 대는 순간부터 편한 숙소.<br>비 오는 밤에도, 승합차를 몰고 와도 <em>지붕 아래 바로 대고</em> 들어오세요.</p>
     <ul class="stats rv" aria-label="숫자로 보는 {{name}}">
-      <li><b>25</b><span>대<small>지붕 있는 지상 주차</small></span></li>
+      <li><b>25</b><span>대<small>지상 주차 · 지붕 22대</small></span></li>
       <li><b>3</b><span>분<small>제천종합운동장까지 걸어서</small></span></li>
       <li><b>1</b><span>대<small>전기차 완속 충전기</small></span></li>
-      <li><b>6</b><span>종<small>전 객실 OTT</small></span></li>
+      <li><b>5</b><span>종<small>전 객실 OTT</small></span></li>
     </ul>
   </div>
 </section>
@@ -562,7 +563,7 @@ footer{background:var(--night);color:#BDB3A7;padding:80px 0 136px;font-size:15px
     <div class="park-head rv">
       <p class="eyebrow">Covered Parking</p>
       <h2>주차 걱정 없는 호텔</h2>
-      <p class="lead">지붕 있는 지상 주차장에 한 번에 25대, 전기차 완속 충전기까지 있습니다. 지하·기계식이 아니라 그대로 들어와 대시면 됩니다.</p>
+      <p class="lead">지상 주차장에 한 번에 25대(그중 지붕 아래 22대), 전기차 완속 충전기까지 있습니다. 지하·기계식이 아니라 그대로 들어와 대시면 됩니다.</p>
     </div>
     <div class="park-grid rv">{{parking_html}}</div>
     <p class="park-more rv"><button type="button" class="btn btn-ink" data-open-g="{{parking_g}}">주차장 사진 {{parking_count}}장 모두 보기</button></p>
@@ -587,7 +588,7 @@ footer{background:var(--night);color:#BDB3A7;padding:80px 0 136px;font-size:15px
     <div class="head rv">
       <p class="eyebrow">Rooms</p>
       <h2>객실</h2>
-      <p class="lead">모든 방에 원적외선 열선 난방이 들어갑니다. 겨울엔 바닥이 찜질방처럼 뜨끈해, 침대 대신 바닥에 이불을 깔고 주무시는 손님도 계십니다. 모든 방 TV에서 넷플릭스·티빙·디즈니+·왓챠·애플TV·유튜브를 리모컨으로 바로 보실 수 있습니다. 예약은 전화나 네이버 예약으로 해 주세요.</p>
+      <p class="lead">모든 방에 원적외선 열선 난방이 들어갑니다. 겨울엔 바닥이 찜질방처럼 뜨끈해, 침대 대신 바닥에 이불을 깔고 주무시는 손님도 계십니다. 모든 방 TV에서 넷플릭스 등 OTT 5종을 리모컨으로 바로 보실 수 있습니다. 예약은 지금 전화로 받습니다(네이버 예약은 준비 중입니다).</p>
     </div>
 {{rooms_html}}
     <div class="more-head rv"><p class="eyebrow">More Rooms</p><h3 class="h3">그 밖의 객실</h3></div>

@@ -90,7 +90,7 @@ faq.append((f"{name}에서 제천 관광지와 단양·영월까지 얼마나 �
             "차로 " + ", ".join(f"{n} 약 {m}분" for _, n, _, m, *_ in cfg["tour"]) + "입니다. 호텔에서 출발하는 대략적인 시간입니다."))
 channels = cfg["channels"]
 filled = [c for c in channels if c["url"] and not c.get("ota")]  # 예약 앱(수수료) 주소는 어디에도 안 씀 — 10/31 대표님
-description = (f"제천 화산동 {name} — 주차 걱정 없는 출장·단체·선수단 숙소. 지붕 있는 지상 주차 25대, 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방. "
+description = (f"제천 화산동 {name} — 주차 걱정 없는 출장·단체·선수단 숙소. 지상 주차 25대(지붕 22대), 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방. "
                f"제천종합운동장 걸어서 약 3분. 출장·단체 문의 {phone}.")
 
 for k, label in (("domain", "도메인"), ("sms", "문자 받을 휴대폰 번호"), ("ga4", "GA4 측정 ID"),
@@ -138,11 +138,14 @@ naver_map_url = f"https://map.naver.com/p/search/{quote(addr_full.split(' (')[0]
 # 가볼 곳: 호텔 → 그곳 카카오맵 길찾기
 kroute = lambda n, la, lo: f"https://map.kakao.com/link/from/{quote(name)},{g['lat']},{g['lng']}/to/{quote(n)},{la},{lo}"
 if not booking:
-    todo_list.append("네이버 예약 주소 — 객실 '네이버 예약' 버튼이 지금은 네이버 지도(주소 검색)로 연결됨")
+    todo_list.append("네이버 예약 주소 — 지금은 객실마다 '네이버 예약 준비 중'(누를 수 없음) 표시")
 # 객실마다 [네이버 예약] [전화 예약] — 10/30 대표님 지시. 네이버 예약 주소가 생기면 config channels 에만 넣으면 됨
 BOOK = (f'<div class="book">'
-        f'<a class="btn btn-naver" href="{escape(booking["url"] if booking else naver_map_url)}" target="_blank" rel="noopener" '
-        f'data-track="room_naver"><span class="n" aria-hidden="true">N</span>네이버 예약</a>'
+        + (f'<a class="btn btn-naver" href="{escape(booking["url"])}" target="_blank" rel="noopener" '
+           f'data-track="room_naver"><span class="n" aria-hidden="true">N</span>네이버 예약</a>' if booking else
+           # 11/3 대표님: 네이버 예약 설정 전 — 지도로 보내지 말고 '준비 중'만 보여 준다
+           '<span class="btn btn-naver is-soon" aria-disabled="true"><span class="n" aria-hidden="true">N</span>네이버 예약 준비 중</span>')
+        +
         f'<a class="btn btn-cu" href="tel:{re.sub(r"[^0-9]", "", cfg["phone_booking"])}" data-track="room_call">{ico_call}전화 예약</a>'
         f'</div>')
 
@@ -319,8 +322,8 @@ business = {
     "checkoutTime": cfg["checkout"],
     "image": V["og_image"],
     "amenityFeature": [{"@type": "LocationFeatureSpecification", "name": n, "value": v} for n, v in (
-        ("지붕 있는 지상 주차장", "25대"), ("승합차 주차", "쏠라티급 입차 가능"), ("발렛 주차", True),
-        ("전기차 완속 충전기", "1대 (위브이)"), ("전 객실 OTT", "넷플릭스·티빙·디즈니+·왓챠·애플TV·유튜브"), ("1층 라운지", "커피머신·얼음정수기·냉장고·전자레인지"),
+        ("지상 주차장", "25대 (지붕 22대)"), ("승합차 주차", "쏠라티급 입차 가능"), ("발렛 주차", True),
+        ("전기차 완속 충전기", "1대 (위브이)"), ("전 객실 OTT", "넷플릭스 등 5종"), ("1층 라운지", "커피머신·얼음정수기·냉장고·전자레인지"),
         ("원적외선 온돌방", "최대 6인"), ("무료 Wi-Fi", True))],
 }
 if domain:
@@ -449,7 +452,7 @@ if posts:
 nl = "\n"
 llms = f"""# {name}
 
-> 제천 화산동 숙소(제천 모텔·비즈니스 호텔급, 출장·단체 숙소). 지붕 있는 지상 주차 25대, 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방, 1층 라운지. 출장·현장 작업팀·운동팀 단체 숙박 문의를 전화·문자로 직접 받습니다.
+> 제천 화산동 숙소(제천 모텔·비즈니스 호텔급, 출장·단체 숙소). 지상 주차 25대(지붕 22대), 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방, 1층 라운지. 출장·현장 작업팀·운동팀 단체 숙박 문의를 전화·문자로 직접 받습니다.
 
 ## 기본 정보
 - 상호: {name} (다른 표기: {', '.join(cfg['name_alt'])})
@@ -459,7 +462,7 @@ llms = f"""# {name}
 - 입실 {cfg['checkin']} · 퇴실 {cfg['checkout']} · 대실 {cfg['daesil']}
 
 ## 주차
-- 지붕 있는 지상 주차장 25대 (지하·기계식 아님)
+- 지상 주차장 25대 (지붕 22대 · 지하·기계식 아님)
 - 현대 쏠라티급 승합차 입차 가능, 발렛 주차, 전기차 완속 충전기 1대(위브이, 비회원 QR 결제 가능)
 - 화물차·대형버스는 주차 불가
 
