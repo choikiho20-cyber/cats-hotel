@@ -547,6 +547,18 @@ async function saveCfg(){
       try{ const r=await put(CFG,b64text(JSON.stringify(c,null,2)+'\n'),cur.sha,'사장님 수정: '+ch.join('·')); cfgSha=r.content.sha; break; }
       catch(e){ if(tries<2&&(e.status===409||e.status===422)) continue; throw e; }
     }
+    // 전화가 바뀌면 글 본문에 적힌 옛 번호도 같이 바꾼다(화면·JSON-LD·llms는 build가 config로, 글은 posts.json에 박혀 있음 — NAP)
+    const oldPh=JSON.parse(orig).phone;
+    if(oldPh&&c.phone!==oldPh){
+      msg('글 속 전화번호 바꾸는 중…');
+      for(let tries=0;;tries++){
+        const j=await gh('posts.json?ref='+BRANCH), txt=b64dec(j.content);
+        if(!txt.includes(oldPh)) break;
+        const all=JSON.parse(txt.split(oldPh).join(c.phone));
+        try{await put('posts.json',b64text(JSON.stringify(all,null,2)+'\n'),j.sha,'사장님 수정: 글 속 전화번호 '+oldPh+' → '+c.phone);posts=all;break}
+        catch(e){if(tries<2&&(e.status===409||e.status===422))continue;throw e}
+      }
+    }
     // 화면의 새 사진 미리보기는 아직 홈페이지에 변환본이 없으니 그대로 둔다(blob 주소 유지)
     Object.entries(names).forEach(([k,n])=>pend.set(n,pend.get(k)));
     cfg=c; orig=JSON.stringify(c); work=clone(c);
