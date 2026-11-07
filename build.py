@@ -237,7 +237,9 @@ V = {
     "route_url": f"https://map.kakao.com/link/to/{quote(name)},{g['lat']},{g['lng']}",
     "naver_map_url": naver_map_url,
     "google_map_url": f"https://www.google.com/maps/dir/?api=1&destination={g['lat']},{g['lng']}",
-    "img_hero": img("hero", f"{name} 지붕 있는 지상 주차장 야간 모습", "100vw", eager=True),
+    "img_hero": img("hero", cfg.get("hero_alt") or f"{name} 첫 화면 사진", "100vw", eager=True),
+    "hero_h1": "<br>".join(escape(s) for s in cfg["hero_title"].split("\n") if s.strip()),
+    "hero_sub": escape(cfg["hero_sub"]),
     "img_lounge": img("lounge", f"{name} 1층 라운지 — 테이블과 커피머신", "(min-width: 720px) 50vw, 100vw"),
     "img_band": img("band", f"{name} 원적외선 온돌방 — 단체 손님용", "100vw"),
     "entrance_note": f'<p class="small">{escape(cfg["entrance_note"])}</p>' if cfg["entrance_note"] else
@@ -273,7 +275,7 @@ V = {
         f'<span class="rt-t">{escape(r["site"])} 평점<b>{r["score"]}</b><small>/{r["scale"]} · 후기 {r["count"]}건</small></span></span>'
         for r in cfg["ratings"]) + f'<small class="rt-date">({cfg["rating_date"]} 기준)</small>',
     # 공지 한 줄(사장님이 관리 화면에서) — 비면 아무것도 안 나옴
-    "notice_html": f'<p class="notice"><span>공지</span>{escape(cfg["notice"])}</p>' if cfg.get("notice") else "",
+    "notice_html": f'<p class="notice"><span>공지</span>{escape(cfg["notice"])}</p>' if cfg.get("notice") and cfg.get("notice_on", True) else "",
     "posts_html": "".join(post_card(x) for x in posts[:3]),
     "reviews_html": reviews_html,
     "review_links": f'<p class="more-reviews">후기 더 보기 {review_links}</p>' if review_links else "",
@@ -423,9 +425,11 @@ if (ROOT / "images" / "posts").is_dir():  # 글해줌이 올린 글 사진은 �
                                               ensure_ascii=False).replace("<", chr(92) + "u003c") + "</script>")), encoding="utf-8")
 # 사장님 관리 화면 — 저장소의 site.config.json을 고치면 GitHub Actions가 다시 빌드
 (DIST / "admin.html").write_text(fill((ROOT / "admin.template.html").read_text(encoding="utf-8"),
-                                      dict(name=escape(name), repo=cfg["repo"], branch=cfg["branch"], cat_svg=cat_svg)), encoding="utf-8")
+                                      dict(name=escape(name), repo=cfg["repo"], branch=cfg["branch"], cat_svg=cat_svg, site=cfg["domain"])), encoding="utf-8")
 (DIST / ".nojekyll").write_text("", encoding="utf-8")
 # IndexNow 키(저장소 루트의 <32자리>.txt) — 글해줌 발행기가 루트에서 찾아 쓰고, 검색엔진은 사이트 루트에서 확인한다
+# 사장님 관리 화면 비밀번호 잠금 파일(토큰을 비밀번호로 잠근 것) — 관리 화면이 /admin-key.json 으로 읽는다
+if (ROOT / "admin-key.json").exists(): shutil.copy(ROOT / "admin-key.json", DIST / "admin-key.json")
 for k in ROOT.glob("*.txt"):
     if re.fullmatch(r"[0-9a-f]{32}", k.stem): shutil.copy(k, DIST / k.name)
 (DIST / "404.html").write_text(f"""<!DOCTYPE html>

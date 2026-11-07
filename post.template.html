@@ -95,5 +95,10 @@ document.addEventListener('click',function(e){var a=e.target.closest('[data-trac
   }).catch(function(){});
 })();
 </script>
+<script>/* 관리 열쇠가 있는 기기에서만 「이 글 수정」 버튼 */
+(function(){try{if(!localStorage.getItem('cats_gh_token'))return}catch(e){return}
+var m=location.pathname.match(/(\d+)\.html$/);if(!m)return;var a=document.createElement('a');
+a.href='../admin.html#'+m[1];a.textContent='이 글 수정';a.style.cssText='position:fixed;right:16px;bottom:84px;z-index:50;padding:10px 16px;border-radius:100px;background:#9A5222;color:#fff;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.3)';
+document.body.appendChild(a)})();</script>
 </body>
 </html>
