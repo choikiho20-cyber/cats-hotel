@@ -240,7 +240,7 @@ V = {
     "img_hero": img("hero", cfg.get("hero_alt") or f"{name} 첫 화면 사진", "100vw", eager=True),
     "hero_h1": "<br>".join(escape(s) for s in cfg["hero_title"].split("\n") if s.strip()),
     "hero_sub": escape(cfg["hero_sub"]),
-    "img_lounge": img("lounge", f"{name} 1층 라운지 — 테이블과 커피머신", "(min-width: 720px) 50vw, 100vw"),
+    "img_lounge": img("lounge", f"{name} 1층 라운지 — 식사 테이블과 프런트", "(min-width: 720px) 50vw, 100vw"),
     "img_band": img("band", f"{name} 원적외선 온돌방 — 단체 손님용", "100vw"),
     "entrance_note": f'<p class="small">{escape(cfg["entrance_note"])}</p>' if cfg["entrance_note"] else
                      todo("내토로 쪽 입구 사진·약도 — 촬영 후 넣기"),
@@ -325,7 +325,7 @@ business = {
     "image": V["og_image"],
     "amenityFeature": [{"@type": "LocationFeatureSpecification", "name": n, "value": v} for n, v in (
         ("지상 주차장", "25대 (지붕 22대)"), ("승합차 주차", "쏠라티급 입차 가능"), ("발렛 주차", True),
-        ("전기차 완속 충전기", "1대 (위브이)"), ("전 객실 OTT", "넷플릭스 등 5종"), ("1층 라운지", "커피머신·얼음정수기·냉장고·전자레인지"),
+        ("전기차 완속 충전기", "1대 (위브이)"), ("OTT", "넷플릭스 등 6종 (트윈룸 제외)"), ("1층 라운지", "커피머신·얼음정수기·냉장고·전자레인지"),
         ("원적외선 온돌방", "최대 6인"), ("무료 Wi-Fi", True))],
 }
 if domain:
@@ -441,7 +441,7 @@ for k in ROOT.glob("*.txt"):
 <main class="wrap page"><header class="bhead up"><p class="eyebrow">404</p><h1>그 주소에는 페이지가 없습니다</h1><p>주소가 바뀌었거나 잘못 적혔을 수 있습니다. 아래에서 찾아 주세요.</p></header>
 <div class="blist up"><a class="bcard" href="{base}/"><h3>홈페이지 처음으로</h3><p>주차 · 객실 · 출장·단체 · 오시는 길</p><span class="go">가기 →</span></a>
 <a class="bcard" href="{base}/blog.html"><h3>소식·안내 글</h3><p>대회 숙소 안내 · 이용 방법</p><span class="go">가기 →</span></a>
-<a class="bcard" href="tel:{V['tel']}"><h3>전화 {phone}</h3><p>예약·문의는 전화나 문자로</p><span class="go">전화 걸기 →</span></a></div></main>
+<a class="bcard" href="tel:{V['tel']}"><h3>전화 {phone}</h3><p>예약·문의는 전화로</p><span class="go">전화 걸기 →</span></a></div></main>
 <footer><div class="wrap"><b>{escape(name)}</b><p>{V['addr_full']}</p><p class="f-legal">© {V['year']} {escape(name)} · 제작 <a href="https://sotongmk.com" target="_blank" rel="noopener">소통마케팅센터</a></p></div></footer></body></html>
 """, encoding="utf-8")
 if posts:
@@ -456,7 +456,7 @@ if posts:
 nl = "\n"
 llms = f"""# {name}
 
-> 제천 화산동 숙소(제천 모텔·비즈니스 호텔급, 출장·단체 숙소). 지상 주차 25대(지붕 22대), 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방, 1층 라운지. 출장·현장 작업팀·운동팀 단체 숙박 문의를 전화·문자로 직접 받습니다.
+> 제천 화산동 숙소(제천 모텔·비즈니스 호텔급, 출장·단체 숙소). 지상 주차 25대(지붕 22대), 전기차 완속 충전기, 쏠라티급 승합차 입차, 최대 6인 원적외선 온돌방, 1층 라운지. 출장·현장 작업팀·운동팀 단체 숙박 문의를 전화로 직접 받습니다.
 
 ## 기본 정보
 - 상호: {name} (다른 표기: {', '.join(cfg['name_alt'])})
@@ -473,7 +473,7 @@ llms = f"""# {name}
 ## 객실
 {nl.join(f"- {r['name']}: {r['people']} — {', '.join(r['points'])}" for r in cfg['rooms'])}
 - {cfg['rooms_more']}
-- 요금은 날짜·인원에 따라 달라 전화·문자로 안내
+- 요금은 날짜·인원에 따라 달라 전화로 안내
 
 ## 출장·선수단·단체
 {nl.join(f"- {t}: {d}" for t, d in cfg['team'])}
@@ -524,6 +524,13 @@ if domain:
         + "".join(f"  <url><loc>{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n", encoding="utf-8")
 for f in (ROOT / "static").iterdir():
     shutil.copy(f, DIST / f.name)
+# 문자 번호가 휴대폰(01x)이 아니면 문자를 못 받으니 문자 버튼을 전부 빼고 하단 바를 두 칸으로 (11/10 일반전화로 교체)
+if not re.sub(r"[^0-9]", "", cfg["sms"]).startswith("01"):
+    for p in [*DIST.rglob("*.html"), *(ROOT / "posts").glob("*.html"), DIST / "blog.css"]:
+        t = p.read_text(encoding="utf-8")
+        n = re.sub(r'<a [^>]*href="sms:[^"]*"[^>]*>.*?</a>', "", t, flags=re.S).replace("1.4fr 1fr 1fr", "1.4fr 1fr")
+        if n != t:
+            p.write_text(n, encoding="utf-8")
 
 print(f"완성: {DIST / 'index.html'} · 글 {len(posts)}편 · blog.html · admin.html")
 if V["robots_meta"]:
